@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Iniciar Sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+        .inputForm {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem;
+        }
+        .input {
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 0.5rem;
+        }
+        .button-submit {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button-submit:hover {
+            background-color: #45a049;
+        }
+        #mensajeError {
+            color: red;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <form class="form" id="loginForm">
+        <div class="flex-column">
+            <label>Email</label>
+            <div class="inputForm">
+                <input type="text" class="input" placeholder="Ingrese su Correo" id="email" required />
+            </div>
+        </div>
+        <div class="flex-column">
+            <label>Contraseña</label>
+            <div class="inputForm">
+                <input type="password" class="input" placeholder="Ingrese su Contraseña" id="password" required />
+            </div>
+        </div>
+        <button class="button-submit" type="submit">Iniciar Sesión</button>
+        <p>¿No tienes cuenta? <span id="signUpLink" style="color: blue; cursor: pointer;">Regístrate</span></p>
+        <div id="mensajeError"></div>
+    </form>
+
+    <script>
+        document.getElementById('signUpLink').addEventListener('click', function () {
+            window.location.href = "RegistroFormulario.html";
+        });
+
+        // Usuario administrador único
+const adminUser = {
+  nombre: "administrador",
+  email: "administrador@gmail.com",
+  cedula: "96748348",
+  password: "admin55",
+  rol: "administrador"
+};
+
+// Insertar el usuario administrador al cargar la página si no existe
+document.addEventListener("DOMContentLoaded", () => {
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  // Verifica si existe el administrador
+  const exists = users.some(u => u.email === adminUser.email);
+  if (!exists) {
+    users.push(adminUser);
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+});
+
+// Manejar el inicio de sesión
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  const usuario = users.find(u => u.email === email && u.password === password);
+  if (usuario) {
+    localStorage.setItem("currentUser", JSON.stringify(usuario));
+    if (usuario.rol === "administrador") {
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "GestionBiblioteca.html";
+    }
+  } else {
+    document.getElementById("mensajeError").textContent = "Credenciales inválidas";
+  }
+});
+
+// Enlace para registro
+document.getElementById("signUpLink").addEventListener("click", function() {
+  window.location.href = "RegistroFormulario.html";
+});
+
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:30001/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('currentUser', JSON.stringify(result.usuario)); // Guarda usuario si es necesario
+                    if (result.usuario.rol === "administrador") {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = "GestionBiblioteca.html";
+                    }
+                } else {
+                    document.getElementById('mensajeError').textContent = result.message || 'Credenciales inválidas';
+                }
+            } catch (error) {
+                console.error('Error al iniciar sesión:', error);
+                document.getElementById('mensajeError').textContent = 'Error al conectar con el servidor';
+            }
+        });
+    </script>
+</body>
+</html>

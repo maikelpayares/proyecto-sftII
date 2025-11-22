@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Biblioteca Virtual</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+        .sidebar h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .sidebar-menu {
+            list-style-type: none;
+            padding: 0;
+        }
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .sidebar-menu a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul class="sidebar-menu">
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#manage-books">Gestionar Libros</a></li>
+            <li><a href="#manage-users">Gestionar Usuarios</a></li>
+            <li><a href="#reports">Reportes</a></li>
+            <li><a href="#loan-requests">Solicitudes de Préstamo</a></li>
+            <li><a href="#manage-fines">Gestionar Multas</a></li>
+            <li><a href="gestion-biblioteca.html">Volver a Biblioteca</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div id="dashboard" class="panel">
+            <h1>Dashboard</h1>
+            <p>Bienvenido al panel de administración de la Biblioteca Virtual.</p>
+        </div>
+        <div id="manage-books" class="panel">
+            <h2>Gestionar Libros</h2>
+            <a href="#" class="btn" onclick="toggleBookForm()">Agregar Nuevo Libro</a>
+            <div id="bookForm" style="display: none; margin-top: 20px;">
+                <h3>Agregar Nuevo Libro</h3>
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="bookTitle">Título:</label>
+                        <input type="text" id="bookTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookAuthor">Autor:</label>
+                        <input type="text" id="bookAuthor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookCategory">Categoría:</label>
+                        <select id="bookCategory">
+                            <option value="ficcion">Ficción</option>
+                            <option value="aventura">Aventura</option>
+                            <option value="romance">Romance</option>
+                            <option value="historia">Historia</option>
+                            <option value="geografia">Geografía</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="addBook()">Guardar Libro</button>
+                </form>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="bookList">
+                    <!-- Los libros se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <div id="manage-users" class="panel">
+            <h2>Gestionar Usuarios</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="userList">
+                    <!-- Los usuarios se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <div id="reports" class="panel">
+            <h2>Reportes</h2>
+            <p>Aquí puedes generar diferentes reportes sobre el uso de la biblioteca.</p>
+        </div>
+        <div id="loan-requests" class="panel">
+            <h2>Solicitudes de Préstamo</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Libro</th>
+                        <th>Fecha de Solicitud</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="loanRequestList">
+                    <!-- Las solicitudes de préstamo se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        <div id="manage-fines" class="panel">
+            <h2>Gestionar Multas</h2>
+            <a href="#" class="btn" onclick="toggleFineForm()">Agregar Nueva Multa</a>
+            <div id="fineForm" style="display: none; margin-top: 20px;">
+                <h3>Agregar Nueva Multa</h3>
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="fineUser">Usuario:</label>
+                        <input type="text" id="fineUser" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fineBook">Libro:</label>
+                        <input type="text" id="fineBook" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fineAmount">Monto:</label>
+                        <input type="number" id="fineAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fineStartDate">Fecha de Inicio:</label>
+                        <input type="date" id="fineStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fineEndDate">Fecha de Fin:</label>
+                        <input type="date" id="fineEndDate" required>
+                    </div>
+                    <button class="btn" onclick="addFine()">Guardar Multa</button>
+                </form>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Libro</th>
+                        <th>Monto</th>
+                        <th>Fecha de Inicio</th>
+                        <th>Fecha de Fin</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="fineList">
+                    <!-- Las multas se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleBookForm() {
+            const form = document.getElementById('bookForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addBook() {
+            const title = document.getElementById('bookTitle').value;
+            const author = document.getElementById('bookAuthor').value;
+            const category = document.getElementById('bookCategory').value;
+            
+            if (title && author) {
+                const book = { 
+                    id: Date.now().toString(),
+                    title, 
+                    author, 
+                    category,
+                    available: true
+                };
+                let books = JSON.parse(localStorage.getItem('books')) || [];
+                books.push(book);
+                localStorage.setItem('books', JSON.stringify(books));
+                
+                updateBookList();
+                
+                // Limpiar el formulario
+                document.getElementById('bookTitle').value = '';
+                document.getElementById('bookAuthor').value = '';
+                document.getElementById('bookCategory').value = 'ficcion';
+                
+                toggleBookForm();
+            } else {
+                alert('Por favor, complete todos los campos.');
+            }
+        }
+
+        function updateBookList() {
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = '';
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            
+            books.forEach((book, index) => {
+                const row = bookList.insertRow();
+                row.innerHTML = `
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td>${book.category}</td>
+                    <td>
+                        <a href="#" onclick="editBook(${index})">Editar</a> |
+                        <a href="#" onclick="deleteBook(${index})">Eliminar</a>
+                    </td>
+                `;
+            });
+        }
+
+        function editBook(index) {
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const book = books[index];
+            
+            document.getElementById('bookTitle').value = book.title;
+            document.getElementById('bookAuthor').value = book.author;
+            document.getElementById('bookCategory').value = book.category;
+            
+            toggleBookForm();
+            books.splice(index, 1);
+            localStorage.setItem('books', JSON.stringify(books));
+            updateBookList();
+        }
+
+        function deleteBook(index) {
+            if (confirm('¿Está seguro de que desea eliminar este libro?')) {
+                const books = JSON.parse(localStorage.getItem('books')) || [];
+                books.splice(index, 1);
+                localStorage.setItem('books', JSON.stringify(books));
+                updateBookList();
+            }
+        }
+
+        function updateUserList() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            users.forEach((user, index) => {
+                const row = userList.insertRow();
+                row.innerHTML = `
+                    <td>${user.nombre}</td>
+                    <td>${user.email}</td>
+                    <td>${user.rol || 'Usuario'}</td>
+                    <td>
+                        <a href="#" onclick="editUser(${index})">Editar</a> |
+                        <a href="#" onclick="deleteUser(${index})">Eliminar</a>
+                    </td>
+                `;
+            });
+        }
+
+        function editUser(index) {
+            // Implementar lógica para editar usuario
+            alert('Función de editar usuario no implementada');
+        }
+
+        function deleteUser(index) {
+            if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                users.splice(index, 1);
+                localStorage.setItem('users', JSON.stringify(users));
+                updateUserList();
+            }
+        }
+
+        function updateLoanRequestList() {
+            const loanRequestList = document.getElementById('loanRequestList');
+            loanRequestList.innerHTML = '';
+            const loanRequests = JSON.parse(localStorage.getItem('loanRequests')) || [];
+            
+            loanRequests.forEach((request, index) => {
+                if (request.status === 'pending') {
+                    const row = loanRequestList.insertRow();
+                    row.innerHTML = `
+                        <td>${request.userName}</td>
+                        <td>${request.bookTitle}</td>
+                        <td>${request.loanDate}</td>
+                        <td>
+                            <button onclick="approveLoanRequest(${index})">Aprobar</button>
+                            <button onclick="rejectLoanRequest(${index})">Rechazar</button>
+                        </td>
+                    `;
+                }
+            });
+        }
+
+        function approveLoanRequest(index) {
+            const loanRequests = JSON.parse(localStorage.getItem('loanRequests')) || [];
+            const request = loanRequests[index];
+            request.status = 'approved';
+            localStorage.setItem('loanRequests', JSON.stringify(loanRequests));
+
+            const books = JSON.parse(localStorage.getItem('books')) || [];
+            const bookIndex = books.findIndex(book => book.id === request.bookId);
+            if (bookIndex !== -1) {
+                books[bookIndex].available = false;
+                localStorage.setItem('books', JSON.stringify(books));
+            }
+
+            updateLoanRequestList();
+            updateBookList();
+        }
+
+        function rejectLoanRequest(index) {
+            const loanRequests = JSON.parse(localStorage.getItem('loanRequests')) || [];
+            loanRequests[index].status = 'rejected';
+            localStorage.setItem('loanRequests', JSON.stringify(loanRequests));
+            updateLoanRequestList();
+        }
+
+        function toggleFineForm() {
+            const form = document.getElementById('fineForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addFine() {
+            const user = document.getElementById('fineUser').value;
+            const book = document.getElementById('fineBook').value;
+            const amount = document.getElementById('fineAmount').value;
+            const startDate = document.getElementById('fineStartDate').value;
+            const endDate = document.getElementById('fineEndDate').value;
+            
+            if (user && book && amount && startDate && endDate) {
+                const fine = { 
+                    id: Date.now().toString(),
+                    cedula: user, 
+                    libro: book,
+                    monto: amount,
+                    fechaInicio: startDate,
+                    fechaFin: endDate
+                };
+                let fines = JSON.parse(localStorage.getItem('multas')) || [];
+                fines.push(fine);
+                localStorage.setItem('multas', JSON.stringify(fines));
+                
+                updateFineList();
+                
+                // Limpiar el formulario
+                document.getElementById('fineUser').value = '';
+                document.getElementById('fineBook').value = '';
+                document.getElementById('fineAmount').value = '';
+                document.getElementById('fineStartDate').value = '';
+                document.getElementById('fineEndDate').value = '';
+                
+                toggleFineForm();
+            } else {
+                alert('Por favor, complete todos los campos.');
+            }
+        }
+
+        function updateFineList() {
+            const fineList = document.getElementById('fineList');
+            fineList.innerHTML = '';
+            const fines = JSON.parse(localStorage.getItem('multas')) || [];
+            
+            fines.forEach((fine, index) => {
+                const row = fineList.insertRow();
+                row.innerHTML = `
+                    <td>${fine.cedula}</td>
+                    <td>${fine.libro}</td>
+                    <td>${fine.monto}</td>
+                    <td>${fine.fechaInicio}</td>
+                    <td>${fine.fechaFin}</td>
+                    <td>
+                        <a href="#" onclick="editFine(${index})">Editar</a> |
+                        <a href="#" onclick="deleteFine(${index})">Eliminar</a>
+                    </td>
+                `;
+            });
+        }
+
+        function editFine(index) {
+            const fines = JSON.parse(localStorage.getItem('multas')) || [];
+            const fine = fines[index];
+            
+            document.getElementById('fineUser').value = fine.cedula;
+            document.getElementById('fineBook').value = fine.libro;
+            document.getElementById('fineAmount').value = fine.monto;
+            document.getElementById('fineStartDate').value = fine.fechaInicio;
+            document.getElementById('fineEndDate').value = fine.fechaFin;
+            
+            toggleFineForm();
+            fines.splice(index, 1);
+            localStorage.setItem('multas', JSON.stringify(fines));
+            updateFineList();
+        }
+
+        function deleteFine(index) {
+            if (confirm('¿Está seguro de que desea eliminar esta multa?')) {
+                const fines = JSON.parse(localStorage.getItem('multas')) || [];
+                fines.splice(index, 1);
+                localStorage.setItem('multas', JSON.stringify(fines));
+                updateFineList();
+            }
+        }
+
+        // Cargar datos al iniciar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBookList();
+            updateUserList();
+            updateLoanRequestList();
+            updateFineList();
+        });
+    </script>
+</body>
+</html>

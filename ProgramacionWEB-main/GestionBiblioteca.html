@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión de Biblioteca</title>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+    }
+    .container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .fine-details {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .sidebar {
+        width: 250px;
+        background-color: rgba(210, 180, 140, 0.9);
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .profile {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .profile img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 1rem;
+    }
+    .sidebar-button {
+        width: 100%;
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        background-color: #8b4513;
+        color: #fff8dc;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .sidebar-button:hover {
+        background-color: #a0522d;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .container {
+        background-color: rgba(255, 253, 240, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        width: 100%;
+        max-width: 800px;
+        backdrop-filter: blur(10px);
+    }
+    .options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .option {
+        background-color: #d2b48c;
+        color: #4a2c0f;
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .option:hover {
+        background-color: #a0522d;
+        color: #fff8dc;
+        transform: translateY(-5px);
+    }
+    .option i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    .option span {
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    .book-list {
+        background-color: #fff8dc;
+        border-radius: 8px;
+        padding: 1rem;
+        max-height: 400px;
+        overflow-y: auto;
+        display: none;
+    }
+    .book-item {
+        background-color: #d2b48c;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    .book-item:hover {
+        background-color: #a0522d;
+        color: #fff8dc;
+    }
+    .book-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    .book-author {
+        font-style: italic;
+    }
+    .book-category {
+        font-size: 0.9rem;
+        color: #4a2c0f;
+    }
+    .book-item:hover .book-category {
+        color: #fff8dc;
+    }
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        display: none;
+    }
+    .pay-fine-button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .pay-fine-button:hover {
+        background-color: #45a049;
+    }
+    .book-cover {
+        width: 100px;
+        height: 150px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+    #reportForm {
+        margin-top: 20px;
+        display: none;
+    }
+    #reportForm textarea {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <img src="./img/usuario_avatar.png" alt="user avatar">
+            <h2 id="userName">Nombre de Usuario</h2>
+        </div>
+        <button class="sidebar-button" onclick="showBooks()">
+            Ver Libros Disponibles
+        </button>
+        <button class="sidebar-button" onclick="showBorrowedBooks()">
+            Mis Libros Prestados
+        </button>
+        <button class="sidebar-button" onclick="showFines()">
+            Ver Multas
+        </button>
+        <button class="sidebar-button" onclick="showReportForm()">Enviar Reporte</button>
+        <button class="sidebar-button" onclick="logout()">Cerrar Sesión</button>
+    </div>
+    <div class="main-content">
+        <div class="container">
+            <h1>Biblioteca Virtual</h1>
+            <div class="options">
+                <a href="#" class="option" onclick="showBooks()">
+                    <i class="fas fa-book"></i>
+                    <span>Ver Libros</span>
+                </a>
+                <a href="#" class="option" onclick="showBorrowedBooks()">
+                    <i class="fas fa-book-reader"></i>
+                    <span>Mis Préstamos</span>
+                </a>
+                <a href="#" class="option" onclick="showFines()">
+                    <i class="fas fa-money-bill"></i>
+                    <span>Multas</span>
+                </a>
+                <a href="#" class="option">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Ayuda</span>
+                </a>
+            </div>
+            <div id="bookList" class="book-list"></div>
+            <div id="reportForm" style="display:none;">
+                <h3>Enviar Reporte</h3>
+                <textarea id="reportText" placeholder="Escribe tu reporte aquí"></textarea>
+                <button onclick="submitReport()">Enviar Reporte</button>
+            </div>
+        </div>
+    </div>
+    <div id="notification" class="notification"></div>
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("userName").textContent = currentUser.nombre || "Usuario";
+        });
+
+        function showBooks() {
+            const bookList = document.getElementById("bookList");
+            bookList.style.display = "block";
+            bookList.innerHTML = "<h2>Libros Disponibles</h2>";
+
+            const books = JSON.parse(localStorage.getItem("books")) || [];
+            books.forEach((book) => {
+                if (book.available) {
+                    const bookItem = document.createElement("div");
+                    bookItem.className = "book-item";
+                    bookItem.innerHTML = `
+                        <img src="${book.coverUrl || 'https://via.placeholder.com/100x150'}" alt="${book.title}" class="book-cover">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-author">por ${book.author}</div>
+                        <div class="book-category">Categoría: ${book.category}</div>
+                        <div>ID del libro: ${book.id}</div>
+                        <button onclick="sendLoanRequest('${book.id}')">Solicitar Préstamo</button>
+                    `;
+                    bookList.appendChild(bookItem);
+                }
+            });
+        }
+
+        function showBorrowedBooks() {
+            const bookList = document.getElementById("bookList");
+            bookList.style.display = "block";
+            bookList.innerHTML = "<h2>Mis Libros Prestados</h2>";
+
+            const loanRequests = JSON.parse(localStorage.getItem("loanRequests")) || [];
+            const userLoans = loanRequests.filter(
+                (request) => request.userId === currentUser.id && request.status === "approved"
+            );
+
+            if (userLoans.length === 0) {
+                bookList.innerHTML += "<p>No tienes libros prestados actualmente.</p>";
+            } else {
+                userLoans.forEach((loan) => {
+                    const bookItem = document.createElement("div");
+                    bookItem.className = "book-item";
+                    bookItem.innerHTML = `
+                        <div class="book-title">${loan.bookTitle}</div>
+                        <div>Fecha de préstamo: ${loan.loanDate}</div>
+                        <div>ID del libro: ${loan.bookId}</div>
+                        <button onclick="returnBook('${loan.bookId}')">Devolver Libro</button>
+                    `;
+                    bookList.appendChild(bookItem);
+                });
+            }
+        }
+
+        function showFines() {
+            const bookList = document.getElementById("bookList");
+            bookList.style.display = "block";
+            bookList.innerHTML = "<h2>Mis Multas</h2>";
+
+            const multas = JSON.parse(localStorage.getItem("multas")) || [];
+            const userFines = multas.filter((multa) => multa.cedula === currentUser.cedula);
+
+            if (userFines.length === 0) {
+                bookList.innerHTML += "<p>No tienes multas pendientes.</p>";
+            } else {
+                userFines.forEach((multa) => {
+                    const multaItem = document.createElement("div");
+                    multaItem.className = "book-item";
+                    multaItem.innerHTML = `
+                        <div class="book-title">Multa por: ${multa.libro}</div>
+                        <div>Monto: $${multa.monto}</div>
+                        <div>Fecha de inicio: ${multa.fechaInicio}</div>
+                        <div>Fecha de fin: ${multa.fechaFin}</div>
+                        <button class="pay-fine-button" onclick="payFine('${multa.id}')">Pagar Multa</button>
+                    `;
+                    bookList.appendChild(multaItem);
+                });
+            }
+        }
+
+        function payFine(multaId) {
+            const multas = JSON.parse(localStorage.getItem("multas")) || [];
+            const multa = multas.find(m => m.id === multaId);
+            if (multa) {
+                localStorage.setItem("multaAPagar", JSON.stringify(multa));
+                window.location.href = "facturacion.html";
+            } else {
+                alert("No se encontró la multa especificada.");
+            }
+        }
+
+        function sendLoanRequest(bookId) {
+            const books = JSON.parse(localStorage.getItem("books")) || [];
+            const book = books.find((b) => b.id === bookId);
+
+            if (book && book.available) {
+                const loanRequests = JSON.parse(localStorage.getItem("loanRequests")) || [];
+                const newRequest = {
+                    id: Date.now().toString(),
+                    userId: currentUser.id,
+                    userName: currentUser.nombre,
+                    bookId: book.id,
+                    bookTitle: book.title,
+                    status: "pending",
+                    loanDate: new Date().toISOString().split('T')[0]
+                };
+
+                loanRequests.push(newRequest);
+                localStorage.setItem("loanRequests", JSON.stringify(loanRequests));
+
+                showNotification("Solicitud de préstamo enviada al administrador");
+                showBooks(); // Actualizar la lista de libros
+            } else {
+                showNotification("El libro no está disponible para préstamo", "error");
+            }
+        }
+
+        function returnBook(bookId) {
+            const books = JSON.parse(localStorage.getItem("books")) || [];
+            const book = books.find(b => b.id === bookId);
+            if (book) {
+                book.available = true;
+                localStorage.setItem("books", JSON.stringify(books));
+
+                const loanRequests = JSON.parse(localStorage.getItem("loanRequests")) || [];
+                const updatedLoanRequests = loanRequests.filter(
+                    request => !(request.bookId === bookId && request.userId === currentUser.id)
+                );
+                localStorage.setItem("loanRequests", JSON.stringify(updatedLoanRequests));
+
+                showNotification("Libro devuelto con éxito");
+                showBorrowedBooks();
+            } else {
+                showNotification("No se pudo devolver el libro", "error");
+            }
+        }
+
+        function showReportForm() {
+            document.getElementById("reportForm").style.display = "block";
+            document.getElementById("bookList").style.display = "none";
+        }
+
+        function submitReport() {
+            const reportText = document.getElementById("reportText").value;
+            if (reportText.trim() === "") {
+                showNotification("Por favor, escribe un reporte antes de enviar", "error");
+                return;
+            }
+
+            const reports = JSON.parse(localStorage.getItem("reports")) || [];
+            reports.push({
+                id: Date.now().toString(),
+                userId: currentUser.id,
+                userName: currentUser.nombre,
+                text: reportText,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem("reports", JSON.stringify(reports));
+
+            showNotification("Reporte enviado con éxito");
+            document.getElementById("reportText").value = "";
+            document.getElementById("reportForm").style.display = "none";
+        }
+
+        function showNotification(message, type = "success") {
+            const notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.style.backgroundColor = type === "success" ? "#4CAF50" : "#f44336";
+            notification.style.display = "block";
+            setTimeout(() => {
+                notification.style.display = "none";
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.removeItem("currentUser");
+            window.location.href = "login.html";
+        }
+
+        function payFine(multaId) {
+        const multas = JSON.parse(localStorage.getItem("multas")) || [];
+        const multa = multas.find(m => m.id === multaId);
+        if (multa) {
+            localStorage.setItem("multaAPagar", JSON.stringify(multa));
+            window.location.href = "facturacion.html";
+        } else {
+            alert("No se encontró la multa especificada.");
+        }
+    }
+    </script>
+</body>
+</html>

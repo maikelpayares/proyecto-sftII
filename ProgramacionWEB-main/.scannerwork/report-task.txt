@@ -1,0 +1,6 @@
+projectKey=biblioteca
+serverUrl=http://localhost:9000
+serverVersion=25.5.0.107428
+dashboardUrl=http://localhost:9000/dashboard?id=biblioteca
+ceTaskId=31bd827e-5ec5-4477-8786-2bcea80efc4d
+ceTaskUrl=http://localhost:9000/api/ce/task?id=31bd827e-5ec5-4477-8786-2bcea80efc4d
